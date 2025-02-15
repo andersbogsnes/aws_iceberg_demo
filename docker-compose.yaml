@@ -1,0 +1,57 @@
+services:
+  trino:
+    image: trinodb/trino:470
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./store.properties:/etc/trino/catalog/store.properties
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio1234
+    command:
+      - server
+      - /data
+      - --console-address
+      - ":9001"
+    volumes:
+      - minio:/data
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 2s
+      timeout: 10s
+      retries: 2
+      start_period: 15s
+  nessie:
+    image: ghcr.io/projectnessie/nessie:0.102.5
+    user: root
+    ports:
+      - "19120:19120"
+    environment:
+      - nessie.version.store.type=ROCKSDB
+      - nessie.version.store.persist.rocks.database-path=/data/nessiestore
+      - nessie.catalog.default-warehouse=warehouse
+      - nessie.catalog.warehouses.warehouse.location=s3://warehouse/nessie/
+      - nessie.catalog.service.s3.default-options.endpoint=http://minio:9000/
+      - nessie.catalog.service.s3.default-options.external-endpoint=http://localhost:9000/
+      - nessie.catalog.service.s3.default-options.access-key=urn:nessie-secret:quarkus:nessie.catalog.secrets.access-key
+      - nessie.catalog.service.s3.default-options.path-style-access=true
+      - nessie.catalog.secrets.access-key.name=minio
+      - nessie.catalog.secrets.access-key.secret=minio1234
+      - nessie.catalog.service.s3.default-options.region=us-east-1
+      - nessie.server.authentication.enabled=false
+    volumes:
+      - nessie:/data/nessiestore
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:9000/q/health" ]
+      interval: 2s
+      timeout: 10s
+      retries: 2
+      start_period: 15s
+volumes:
+  minio:
+  nessie:
