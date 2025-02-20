@@ -25,6 +25,6 @@ t = nessie_catalog.create_table_if_not_exists("store.events",
 # Load the data from a Parquet file. Note that we're using the Iceberg schema translated into arrow
 # to load the data. The interoperability between Iceberg types and Arrow types make sure the data is
 # loaded with the correct schema and doesn't have to be reconverted
-df = pq.read_table("/home/anders/projects/tutorials/aws_iceberg_demo/data/parquet/2019-Oct.parquet",
+df = pq.read_table("./data/parquet/2019-Oct.parquet",
                    schema=t.schema().as_arrow())
 t.append(df)

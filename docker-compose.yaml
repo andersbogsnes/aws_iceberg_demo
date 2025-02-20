@@ -4,7 +4,11 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./store.properties:/etc/trino/catalog/store.properties
+      - ./trino/store.properties:/etc/trino/catalog/store.properties
+    depends_on:
+      nessie:
+        condition: service_healthy
+
   minio:
     image: minio/minio
     ports:
@@ -52,6 +56,9 @@ services:
       timeout: 10s
       retries: 2
       start_period: 15s
+    depends_on:
+      minio:
+        condition: service_healthy
 volumes:
   minio:
   nessie:

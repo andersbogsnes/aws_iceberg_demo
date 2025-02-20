@@ -20,7 +20,7 @@ st.image("images/shopping.jpg",
 
 @st.cache_resource
 def duckdb_conn() -> DuckDBPyConnection:
-    conn = duckdb.connect("local.ddb", read_only=True)
+    conn = duckdb.connect("local.ddb")
     conn.install_extension("iceberg")
     conn.load_extension("iceberg")
     conn.sql("""

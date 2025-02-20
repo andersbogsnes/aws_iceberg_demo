@@ -14,7 +14,7 @@ t = nessie_catalog.load_table("store.events")
 # %%
 # Load the data from a Parquet file. Note that we're using the Iceberg schema to load the data,
 # to make sure the data is loaded with the correct schema
-df = pq.read_table("/home/anders/projects/tutorials/aws_iceberg_demo/data/parquet/2019-Nov.parquet",
+df = pq.read_table("data/parquet/2019-Nov.parquet",
                    schema=t.schema().as_arrow())
 # %%
 # Appending new data will create a new snapshot.
