@@ -13,7 +13,8 @@ def _get_docker_trino_engine() -> sa.Engine:
 
 def _get_athena_engine() -> sa.Engine:
     return sa.create_engine(
-        "awsathena+arrow://:@athena.eu-north-1.amazonaws.com:443/stores?s3_staging_dir=s3://data-engineering-events/athena-staging")
+        "awsathena+arrow://:@athena.eu-north-1.amazonaws.com:443/"
+        "stores?s3_staging_dir=s3://data-engineering-events/athena-staging")
 
 
 def get_trino_engine() -> sa.Engine:
@@ -52,7 +53,10 @@ def get_duckdb_conn() -> duckdb.DuckDBPyConnection:
 
 
 def _get_minio_fs() -> S3FileSystem:
-    return s3fs.S3FileSystem(endpoint_url="http://localhost:9000", key="minio", secret="minio1234", use_ssl=False)
+    return s3fs.S3FileSystem(endpoint_url="http://localhost:9000",
+                             key="minio",
+                             secret="minio1234",
+                             use_ssl=False)
 
 
 def _get_s3_fs() -> S3FileSystem:

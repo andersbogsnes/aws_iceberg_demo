@@ -1,5 +1,4 @@
 version = 1
-revision = 1
 requires-python = ">=3.12"
 
 [[package]]
@@ -153,9 +152,7 @@ name = "aws-iceberg-demo"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "datafusion" },
     { name = "duckdb" },
-    { name = "duckdb-engine" },
     { name = "httpx" },
     { name = "polars" },
     { name = "pyarrow" },
@@ -164,13 +161,12 @@ dependencies = [
     { name = "rich" },
     { name = "streamlit" },
     { name = "trino", extra = ["sqlalchemy"] },
+    { name = "typer" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "datafusion", specifier = ">=44.0.0" },
     { name = "duckdb", specifier = ">=1.2.0" },
-    { name = "duckdb-engine", specifier = ">=0.15.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "polars", specifier = ">=1.22.0" },
     { name = "pyarrow", specifier = ">=19.0.0" },
@@ -179,6 +175,7 @@ requires-dist = [
     { name = "rich", specifier = ">=13.9.4" },
     { name = "streamlit", specifier = ">=1.42.1" },
     { name = "trino", extras = ["sqlalchemy"], specifier = ">=0.333.0" },
+    { name = "typer", specifier = ">=0.15.2" },
 ]
 
 [[package]]
@@ -309,7 +306,7 @@ name = "click"
 version = "8.1.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "platform_system == 'Windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b/click-8.1.8.tar.gz", hash = "sha256:ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a", size = 226593 }
 wheels = [
@@ -323,23 +320,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44", size = 27697 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6", size = 25335 },
-]
-
-[[package]]
-name = "datafusion"
-version = "44.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pyarrow" },
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/30/24/83468ebfe6f5ed9d7d483c8c09d88001ff57290d3f052b303a635a35a34b/datafusion-44.0.0.tar.gz", hash = "sha256:5fc3740406ff531527aa8baa5954fe0bf1f02ea72170e172746b38cffc0d8d50", size = 144129 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/94/0e/c4a3b57566222280218ecaad324da9d9b1f226a43a2de9a80ea5c114c28d/datafusion-44.0.0-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:4786f0a09c6b422ac18c6ea095650c14454be5af3df880b5c169688f610ab41a", size = 23836633 },
-    { url = "https://files.pythonhosted.org/packages/84/24/bccab6dc3017252b0db611d64dc34363f4209625c3bf2bacc64c74299f67/datafusion-44.0.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:bbad11b33c424a658edbc52db39dfe4ddc30339ffac7c43cdc1aa128c260ae76", size = 22345779 },
-    { url = "https://files.pythonhosted.org/packages/41/a1/751df680b8e53e79a3226ad82e91e681ac41ee4aed94822c0e46faab1c50/datafusion-44.0.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4ca3b47fd34e1c96cf6d40a877245afd36f3ccf8b39dda1e5b6f811f273af781", size = 24659036 },
-    { url = "https://files.pythonhosted.org/packages/ab/e8/22d3f02545a572d8bbfc22ac32d1e5d7d8efc9bbe57ba2045182e4bdc387/datafusion-44.0.0-cp38-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:22d2e3ecf5d0b1b75c8ad48c8d9af14a0ac4de1633e86d3b397614f68aa8123c", size = 23768362 },
-    { url = "https://files.pythonhosted.org/packages/48/40/76906a8644da47b658da050c1a52202b97eed4f0b41007a77e72e3427c30/datafusion-44.0.0-cp38-abi3-win_amd64.whl", hash = "sha256:b36774dca54a0e1c88c8080b8c72cc2df5e95f4340a0cdbdd18a0473401551c5", size = 23647042 },
 ]
 
 [[package]]
@@ -364,20 +344,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/69/42/6fa3c0899b10d16206a4d26640c423572d299025fec3249ac4fa37a39ae7/duckdb-1.2.0-cp313-cp313-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:2835bc4828d2e1f8ad58f8ef946815af8beb55f9697e6e9d5a028b81abc02c62", size = 18377184 },
     { url = "https://files.pythonhosted.org/packages/e3/6d/d3bcf9b5bd6d0a98c509c31b833776869407e6d6a000e25d6661070013a2/duckdb-1.2.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:b35284599ac6bf6a09ffd334bc7f4d5df47126bce054a0f73b53f3eac1a5688e", size = 21703527 },
     { url = "https://files.pythonhosted.org/packages/22/2c/95dada2a1ebd52d49c79d8ac869c3503d609caa11d775b009bce542783f1/duckdb-1.2.0-cp313-cp313-win_amd64.whl", hash = "sha256:5cf770fdd5244e47b3cbca6dd4ef2d13b6b9a6071f3fc7b55487e9ddff19e9cd", size = 11351098 },
-]
-
-[[package]]
-name = "duckdb-engine"
-version = "0.15.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "duckdb" },
-    { name = "packaging" },
-    { name = "sqlalchemy" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ac/2d/ea892e63f8b372a3aa48caa2de9eed8e4c731275b9715a1334be6b784329/duckdb_engine-0.15.0.tar.gz", hash = "sha256:59f67ec95ebf9eb4dea22994664dfd34edce3c7416b862daa46da43f572ad6ef", size = 47695 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/0c/92/a3b7edba792772f364ad6c57ceb8685fb5ae5f893704650f2b46978f9b34/duckdb_engine-0.15.0-py3-none-any.whl", hash = "sha256:d18acd73f03202145e1baa86605dca3612080fd0a849dbc42b38111ffee6857c", size = 49634 },
 ]
 
 [[package]]
@@ -1276,6 +1242,15 @@ wheels = [
 ]
 
 [[package]]
+name = "shellingham"
+version = "1.5.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/58/15/8b3609fd3830ef7b27b655beb4b4e9c62313a4e8da8c676e142cc210d58e/shellingham-1.5.4.tar.gz", hash = "sha256:8dbca0739d487e5bd35ab3ca4b36e11c4078f3a234bfce294b0a0291363404de", size = 10310 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/f9/0595336914c5619e5f28a1fb793285925a8cd4b432c9da0a987836c7f822/shellingham-1.5.4-py2.py3-none-any.whl", hash = "sha256:7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686", size = 9755 },
+]
+
+[[package]]
 name = "six"
 version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1363,7 +1338,7 @@ dependencies = [
     { name = "toml" },
     { name = "tornado" },
     { name = "typing-extensions" },
-    { name = "watchdog", marker = "sys_platform != 'darwin'" },
+    { name = "watchdog", marker = "platform_system != 'Darwin'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/08/58/b1875ccb6901cec7a721059bfd9122107d29e0b0ccfdcea9d353af6b5c52/streamlit-1.42.2.tar.gz", hash = "sha256:62026dbdcb482790933f658b096d7dd58fa70da89c1f06fbc3658b91dcd4dab2", size = 9169615 }
 wheels = [
@@ -1441,6 +1416,21 @@ sqlalchemy = [
 ]
 
 [[package]]
+name = "typer"
+version = "0.15.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "rich" },
+    { name = "shellingham" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8b/6f/3991f0f1c7fcb2df31aef28e0594d8d54b05393a0e4e34c65e475c2a5d41/typer-0.15.2.tar.gz", hash = "sha256:ab2fab47533a813c49fe1f16b1a370fd5819099c00b119e0633df65f22144ba5", size = 100711 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7f/fc/5b29fea8cee020515ca82cc68e3b8e1e34bb19a3535ad854cac9257b414c/typer-0.15.2-py3-none-any.whl", hash = "sha256:46a499c6107d645a9c13f7ee46c5d5096cae6f5fc57dd11eccbbb9ae3e44ddfc", size = 45061 },
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1463,7 +1453,7 @@ name = "tzlocal"
 version = "5.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "tzdata", marker = "sys_platform == 'win32'" },
+    { name = "tzdata", marker = "platform_system == 'Windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/33/cc/11360404b20a6340b9b4ed39a3338c4af47bc63f87f6cea94dbcbde07029/tzlocal-5.3.tar.gz", hash = "sha256:2fafbfc07e9d8b49ade18f898d6bcd37ae88ce3ad6486842a2e4f03af68323d2", size = 30480 }
 wheels = [

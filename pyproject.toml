@@ -9,9 +9,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "datafusion>=44.0.0",
     "duckdb>=1.2.0",
-    "duckdb-engine>=0.15.0",
     "httpx>=0.28.1",
     "polars>=1.22.0",
     "pyarrow>=19.0.0",
@@ -20,4 +18,8 @@ dependencies = [
     "rich>=13.9.4",
     "streamlit>=1.42.1",
     "trino[sqlalchemy]>=0.333.0",
+    "typer>=0.15.2",
 ]
+
+[project.scripts]
+demo = "aws_iceberg_demo.cli:app"

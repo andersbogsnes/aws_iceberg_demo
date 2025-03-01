@@ -2,7 +2,6 @@ import pathlib
 
 import duckdb
 
-
 def convert_csv(in_path: pathlib.Path, out_path: pathlib.Path):
     sql = f"COPY '{in_path}' to '{out_path}' (FORMAT 'parquet')"
     duckdb.sql(sql)
