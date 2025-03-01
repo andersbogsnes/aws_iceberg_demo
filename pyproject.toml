@@ -11,10 +11,11 @@ requires-python = ">=3.12"
 dependencies = [
     "datafusion>=44.0.0",
     "duckdb>=1.2.0",
-    "getdaft[aws]>=0.4.3",
+    "duckdb-engine>=0.15.0",
     "httpx>=0.28.1",
     "polars>=1.22.0",
     "pyarrow>=19.0.0",
+    "pyathena[arrow,sqlalchemy]>=3.12.2",
     "pyiceberg[glue,s3fs]>=0.8.1",
     "rich>=13.9.4",
     "streamlit>=1.42.1",

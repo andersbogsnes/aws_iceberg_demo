@@ -39,7 +39,7 @@ services:
       - nessie.version.store.type=ROCKSDB
       - nessie.version.store.persist.rocks.database-path=/data/nessiestore
       - nessie.catalog.default-warehouse=warehouse
-      - nessie.catalog.warehouses.warehouse.location=s3://warehouse/nessie/
+      - nessie.catalog.warehouses.warehouse.location=s3://data-engineering-events/warehouse/nessie/
       - nessie.catalog.service.s3.default-options.endpoint=http://minio:9000/
       - nessie.catalog.service.s3.default-options.external-endpoint=http://localhost:9000/
       - nessie.catalog.service.s3.default-options.access-key=urn:nessie-secret:quarkus:nessie.catalog.secrets.access-key

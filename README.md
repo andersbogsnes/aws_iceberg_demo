@@ -16,3 +16,16 @@ We want to filter on the following fields:
 
 ## Data source
 https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store
+
+
+## Startup
+Start the docker containers
+
+```bash
+docker compose up -d
+```
+
+Run the bootstrap script to initialize the local buckets
+```bash
+python bootstrap.py
+```
