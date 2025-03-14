@@ -5,10 +5,12 @@ Now that we have some data, let's try querying it. We have a number of options, 
 the strengths of using a format like Iceberg. Open storage standards means any query engine can
 choose to support it
 """
+import datetime as dt
+import time
+
 import polars as pl
 
 from aws_iceberg_demo.catalog import get_catalog
-import time
 
 catalog = get_catalog()
 t = catalog.load_table("store.events")
@@ -18,17 +20,18 @@ t = catalog.load_table("store.events")
 With pyiceberg, we can do some filtering before fetching the data. Pyiceberg uses Apache Arrow
 # behind the scenes, so converting to your favourite DataFrame library is straight forward
 """
-from pyiceberg.expressions import GreaterThanOrEqual, LessThanOrEqual, And
+from pyiceberg.expressions import GreaterThanOrEqual, LessThanOrEqual, And, EqualTo
 
 start_time = time.perf_counter()
 # Apply predicates to only get the data we're interested in
-df = t.scan(row_filter=And(GreaterThanOrEqual("event_time", "2019-11-01T00:00:00+00:00"),
-                           LessThanOrEqual("event_time", "2019-11-07T00:00:00+00:00")),
+df = t.scan(row_filter=And(GreaterThanOrEqual("event_time", "2019-10-01T00:00:00+00:00"),
+                           LessThanOrEqual("event_time", "2019-10-31T00:00:00+00:00"),
+                           EqualTo("event_type", "purchase")),
             selected_fields=("event_time", "category_code", "price")
-            ).to_arrow()
+            ).to_polars()
 print(f"Iceberg Scan {time.perf_counter() - start_time:.5f} seconds")
 
-print(pl.from_arrow(df).group_by(pl.col("category_code")).agg(avg_price=pl.col("price").mean()))
+print(df.group_by(pl.col("category_code")).agg(avg_price=pl.col("price").cast(pl.Float64).mean()))
 print(f"With polars aggregation: {time.perf_counter() - start_time:.5f} seconds")
 # %%
 """
@@ -38,15 +41,15 @@ Duckdb doesn't yet talk to the catalogue directly, it reads the metadata.json fi
 which we can get from the catalogue
 """
 from aws_iceberg_demo.connections import get_duckdb_conn
-conn = get_duckdb_conn()
 
-metadata_file = t.metadata_location
+conn = get_duckdb_conn()
 
 sql = f"""
 SELECT 
     category_code, avg(price) as avg_price 
-from iceberg_scan('{metadata_file}') 
-where event_time between '2019-11-01' and '2019-11-07'
+from iceberg_scan('{t.metadata_location}') 
+where event_time between '2019-10-01' and '2019-10-31'
+and event_type = 'purchase'
 GROUP BY all
 ORDER BY avg_price DESC
 """
@@ -62,8 +65,16 @@ We can use polars directly on the iceberg table as well
 import polars as pl
 
 start_time = time.perf_counter()
-df = pl.scan_iceberg(t).group_by(pl.col("category_code")).agg(avg_price=pl.col("price").mean()).sort("avg_price",
-                                                                                      descending=True).collect()
+df = (
+    pl.scan_iceberg(t)
+    .filter(pl.col('event_type').eq('purchase'),
+            pl.col('event_time').is_between(dt.datetime(year=2019, month=10, day=1, tzinfo=dt.UTC),
+                                            dt.datetime(year=2019, month=10, day=31, tzinfo=dt.UTC)))
+    .group_by(pl.col("category_code"))
+    .agg(avg_price=pl.col("price").cast(pl.Float64).mean())
+    .sort("avg_price", descending=True)
+    .collect()
+)
 print(df)
 print(f"Polars: {time.perf_counter() - start_time:.5f} seconds")
 # %%
@@ -85,7 +96,8 @@ select
     avg(price) as avg_price
 from store.events
 where event_time between
-      CAST('2019-11-01' as timestamp) and CAST('2019-11-07' as timestamp)
+      CAST('2019-10-01' as timestamp) and CAST('2019-10-31' as timestamp)
+    AND event_type = 'purchase'
 group by category_code
 ORDER BY avg_price DESC
 """)).fetchall()

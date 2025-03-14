@@ -3,7 +3,7 @@ from typing import Literal, cast
 
 from rich.console import Console
 
-_tutorial_type_env = os.getenv("TUTORIAL_TYPE", "aws")
+_tutorial_type_env = os.getenv("TUTORIAL_TYPE", "local")
 if _tutorial_type_env not in ("aws", "local"):
     raise ValueError(f"Unknown TUTORIAL_TYPE: {_tutorial_type_env}")
 

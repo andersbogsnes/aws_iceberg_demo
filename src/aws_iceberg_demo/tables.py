@@ -1,4 +1,6 @@
+from pyiceberg.partitioning import PartitionSpec, PartitionField
 from pyiceberg.schema import Schema
+from pyiceberg.transforms import MonthTransform
 from pyiceberg.types import NestedField, TimestamptzType, StringType, DecimalType, \
     LongType
 
@@ -13,3 +15,5 @@ event_table_schema = Schema(
     NestedField(8, "user_id", LongType(), required=True, doc="User Id"),
     NestedField(9, "user_session", StringType(), required=False, doc="ID for User's current session")
 )
+
+monthly_event_partition = PartitionSpec(PartitionField(source_id=1, field_id=1, transform=MonthTransform(), name="event_month_transform"))

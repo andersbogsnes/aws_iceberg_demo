@@ -5,18 +5,15 @@ as our inserts vary in size. Each delete file becomes an extra bit of overhead t
 
 import sqlalchemy as sa
 
-from aws_iceberg_demo.catalog import get_catalog
 # %%
 from aws_iceberg_demo.connections import get_trino_engine
-
-t = get_catalog().load_table("store.events")
 
 # %%
 """
 A common analytics query might be 'What is the most popular category per month'
 """
 
-sql = "OPTIMIZE store.events REWRITE DATA USING BIN_PACK"
+sql = "ALTER TABLE store.events EXECUTE optimize"
 
 engine = get_trino_engine()
 

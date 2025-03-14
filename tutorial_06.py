@@ -16,13 +16,13 @@ the metadata level, instead of the physical file layout.
 
 In this example, we want to optimize a common analytical query - what's the top 10 categories per month?
 """
-import pathlib
+
 
 #%%
 from aws_iceberg_demo.catalog import get_catalog
 from aws_iceberg_demo.connections import get_duckdb_conn
 import time
-
+import pathlib
 from aws_iceberg_demo.tables import event_table_schema
 
 t = get_catalog().load_table("store.events")
@@ -106,13 +106,12 @@ print(f"Partitioned runtime: {time.perf_counter() - start_time} seconds")
 
 #%%
 from aws_iceberg_demo.connections import get_trino_engine
-import sqlalchemy as sa
 import polars as pl
 
 engine = get_trino_engine()
 start_time = time.perf_counter()
 with engine.connect() as conn:
-   r = conn.execute(sa.text(f"""
+   r = pl.read_database("""
     with monthly_categories as (
     SELECT 
     date_trunc('month', event_time) as event_month, 
@@ -131,8 +130,6 @@ with engine.connect() as conn:
 )
 
 select event_month, num_events from ranked where rank_number <= 10
-    """))
-print(pl.from_arrow(r.cursor.as_arrow()))
-
+    """, conn)
 print(f"Partitioned runtime: {time.perf_counter() - start_time} seconds")
 

@@ -15,6 +15,7 @@ from aws_iceberg_demo.tables import event_table_schema
 catalog = get_catalog()
 catalog.create_namespace_if_not_exists("store")
 
+
 # %%
 # Create a table, using the predefined Iceberg schema. There is now a snapshot in the bucket
 # defining this table

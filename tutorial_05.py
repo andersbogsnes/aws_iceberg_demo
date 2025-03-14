@@ -6,8 +6,6 @@ _loaded_at column.
 
 In Iceberg, time-travel is built-in, as all we have to do is keep track of the metadata for the files
 """
-import duckdb
-
 from aws_iceberg_demo.connections import get_trino_engine
 import sqlalchemy as sa
 import polars as pl
@@ -16,9 +14,10 @@ pl.config.Config.set_tbl_width_chars(-1)
 
 engine = get_trino_engine()
 
+# Unfortunately, the way Nessie is built - this section won't work locally
 with engine.connect() as conn:
-    result = conn.execute(sa.text('SELECT * FROM store."events$snapshots"'))
-    print(pl.from_arrow(result.cursor.as_arrow()))
+    print(pl.read_database('SELECT * FROM store."events$snapshots"', conn))
+
 
 #%%
 """
@@ -30,8 +29,8 @@ with engine.connect() as conn:
     FROM store.events FOR VERSION AS OF 8433192130702135638 
     group by _loaded_at
     """
-    result = conn.execute(sa.text(sql))
-    print(pl.from_arrow(result.cursor.as_arrow()))
+    result = pl.read_database(sql, conn)
+    print(result)
 
 #%%
 """We can also travel in time based on timestamps"""

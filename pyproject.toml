@@ -5,12 +5,13 @@ build-backend = "hatchling.build"
 [project]
 name = "aws-iceberg-demo"
 version = "0.1.0"
-description = "Add your description here"
+description = "Source code for the Iceberg demo"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "duckdb>=1.2.0",
     "httpx>=0.28.1",
+    "millify>=0.1.1",
     "polars>=1.22.0",
     "pyarrow>=19.0.0",
     "pyathena[arrow,sqlalchemy]>=3.12.2",
